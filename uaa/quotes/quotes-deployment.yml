@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quotes
+  namespace: gotham
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quotes
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: quotes
+        version: 'v1'
+    spec:
+      initContainers:
+        - name: init-ds
+          image: busybox:latest
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              while true
+              do
+                rt=$(nc -z -w 1 quotes-mongodb 27017)
+                if [ $? -eq 0 ]; then
+                  echo "DB is UP"
+                  break
+                fi
+                echo "DB is not yet reachable;sleep for 10s before retry"
+                sleep 10
+              done
+      containers:
+        - name: quotes-app
+          image: anantgowadiya/quotes
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: quotes
+            - name: SPRING_DATA_MONGODB_URI
+              value: 'mongodb://quotes-mongodb-0.quotes-mongodb.gotham:27017'
+            - name: JHIPSTER_METRICS_LOGS_ENABLED
+              value: 'true'
+            - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+              value: 'true'
+            - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+              value: jhipster-logstash
+            - name: SPRING_ZIPKIN_ENABLED
+              value: 'true'
+            - name: SPRING_ZIPKIN_BASE_URL
+              value: http://jhipster-zipkin
+            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+              value: 'x-request-id,x-ot-span-context'
+            - name: JAVA_OPTS
+              value: ' -Xmx256m -Xms256m'
+          resources:
+            requests:
+              memory: '512Mi'
+              cpu: '500m'
+            limits:
+              memory: '1Gi'
+              cpu: '1'
+          ports:
+            - name: http
+              containerPort: 8081
+          readinessProbe:
+            httpGet:
+              path: /services/quotes/management/health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /services/quotes/management/info
+              port: http
+            initialDelaySeconds: 120

@@ -1,0 +1,53 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.jhipster.keeper"
+    },
+    "jhipsterVersion": "6.4.1",
+    "applicationType": "uaa",
+    "baseName": "uaa",
+    "packageName": "com.jhipster.keeper",
+    "packageFolder": "com/jhipster/keeper",
+    "serverPort": "9999",
+    "authenticationType": "uaa",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "embeddableLaunchScript": false,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true,
+    "appsFolders": [
+      "gateway",
+      "quotes",
+      "uaa"
+    ],
+    "directoryPath": "../",
+    "clusteredDbApps": [
+      "gateway",
+      "quotes",
+      "uaa"
+    ],
+    "jwtSecretKey": "YTg5MWQxOWU1YmYxMmZjOGI5MWZmMmZjYjM2YmM0MmYxMmNjMWJhZTJjMjUxZWMzNjM5ZDAwZGVjMGQyZmJlNGQ4ZTgwNTk2MTlmNzUwNzc3YWZiOWM3YTdmZTE1NzA1YzE5Mw==",
+    "dockerRepositoryName": "anantgowadiya",
+    "dockerPushCommand": "docker push",
+    "kubernetesNamespace": "gotham",
+    "ingressDomain": "34.67.38.135.nip.io",
+    "monitoring": "elk",
+    "istio": true
+  }
+}
